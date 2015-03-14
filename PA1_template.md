@@ -5,8 +5,6 @@ output:
     keep_md: true
 ---
 
-
-
 ## Loading and preprocessing the data
 
 The first step is to unzip the data we just downloaded from the repository. Then, knowing that the NA string is "NA", we can read the csv file and take a look at the data. 
@@ -46,6 +44,8 @@ Now it is clear that the values of the interval columns give us the starting tim
 
 
 ```r
+library(lubridate)
+library(dplyr)
 data$date <- ymd(data$date)
 
 interval <- sprintf("%04s", data$interval) # hhmm
@@ -108,16 +108,22 @@ summary
 meanPerDay <- summary["Mean"]
 medianPerDay <- summary["Median"]
 
+library(ggplot2)
 g <- ggplot(stepsPerDay, aes(date, sum))
 g + geom_bar(stat="identity", colour="steelblue", fill="steelblue") +
     ylab("Total steps") +
+    xlab("Date") +
     
-    # Draw horizontal mean
-    geom_hline(aes(yintercept = meanPerDay, linetype = "mean"),
-               colour = "red", show_guide = T) +
+    # Draw horizontal mean and median
+    geom_hline(aes(yintercept = meanPerDay, colour = "Mean"),
+               linetype = 1,
+               show_guide = T) +
+    geom_hline(aes(yintercept = medianPerDay, colour = "Median"),
+               linetype = 2,
+               show_guide = T) +
     
     # Add aesthetic mapping to create legend
-    scale_linetype_manual("Stats", values = c("mean" = 1))
+    scale_colour_manual("Stats", values = c("Mean" = "red", "Median" = "green"))
 ```
 
 ![plot of chunk histogram](figure/histogram-1.png) 
@@ -206,13 +212,19 @@ completeMedianPerDay <- completeSummary["Median"]
 g <- ggplot(stepsPerDay, aes(date, sum))
 g + geom_bar(stat="identity", colour="steelblue", fill="steelblue") +
     ylab("Total steps") +
+    xlab("Date") +
     
-    # Draw horizontal mean
-    geom_hline(aes(yintercept = completeMeanPerDay, linetype = "mean"),
-               colour = "red", show_guide = T) +
+    # Draw horizontal mean and median
+    geom_hline(aes(yintercept = completeMeanPerDay, colour = "Mean"),
+               linetype = 1,
+               show_guide = T) +
+    geom_hline(aes(yintercept = completeMedianPerDay, colour = "Median"),
+               linetype = 2,
+               show_guide = T) +
     
     # Add aesthetic mapping to create legend
-    scale_linetype_manual("Stats", values = c("mean" = 1))
+    scale_colour_manual("Stats",
+                        values = c("Mean" = "red", "Median" = "green"))
 ```
 
 ![plot of chunk histogramComplete](figure/histogramComplete-1.png) 
@@ -255,7 +267,7 @@ g + geom_line() +
     scale_x_discrete(
         breaks=seq(0, 86400, 7200), # one every 7200 seconds (2 hours)
         labels=paste(seq(0,24,2), "h", sep="")
-    ) + theme_bw()
+    )
 ```
 
 ![plot of chunk comparison](figure/comparison-1.png) 
