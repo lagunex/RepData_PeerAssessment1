@@ -351,6 +351,13 @@ max
 
 <p>In total, the dataset contains 2304 missing values. Because their precense may introduce bias into some calculations or summaries of the data, we create a new dataset, copying the original and filling the NA with the mean of the corresponding 5-minute interval.</p>
 
+<pre><code class="r">numberOfNA &lt;- length(which(is.na(data$steps)))
+numberOfNA
+</code></pre>
+
+<pre><code>## [1] 2304
+</code></pre>
+
 <pre><code class="r">completeData &lt;- data
 naIndexes &lt;- which(is.na(completeData$steps))
 for(i in naIndexes) {

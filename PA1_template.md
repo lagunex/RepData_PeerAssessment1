@@ -179,6 +179,15 @@ In total, the dataset contains 2304 missing values. Because their precense may i
 
 
 ```r
+numberOfNA <- length(which(is.na(data$steps)))
+numberOfNA
+```
+
+```
+## [1] 2304
+```
+
+```r
 completeData <- data
 naIndexes <- which(is.na(completeData$steps))
 for(i in naIndexes) {

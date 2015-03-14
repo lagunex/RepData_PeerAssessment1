@@ -105,6 +105,9 @@ seconds_to_period(
 In total, the dataset contains `r length(which(is.na(data$steps)))` missing values. Because their precense may introduce bias into some calculations or summaries of the data, we create a new dataset, copying the original and filling the NA with the mean of the corresponding 5-minute interval.
 
 ```{r}
+numberOfNA <- length(which(is.na(data$steps)))
+numberOfNA
+
 completeData <- data
 naIndexes <- which(is.na(completeData$steps))
 for(i in naIndexes) {
